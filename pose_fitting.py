@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
-
-
+from openni import openni2
 import cv2
 import mediapipe as mp
 import numpy as np
 import math
 from time import sleep
-import keyboard
-import serial
+# import serial
 from PIL import Image
 
 # ser = serial.Serial(
@@ -22,6 +20,15 @@ from PIL import Image
 # ser.open()
 # ser.isOpen()
 
+openni2.initialize()     # can also accept the path of the OpenNI redistribution
+
+dev = openni2.Device.open_any()
+print(dev.get_device_info())
+
+# depth_stream = dev.create_depth_stream()
+color_stream = dev.create_color_stream()
+# depth_stream.start()
+color_stream.start()
 
 
 DESIRED_HEIGHT = 768
@@ -133,19 +140,16 @@ pose = mp_pose.Pose(
 #         model_complexity=2,
 #         enable_segmentation=True,
 #         min_detection_confidence=0.5) as pose:
-while cap.isOpened():
-    if keyboard.is_pressed("a"):
-        test_cloth = change_cloth("test_change.png")
-        print("on pressed a")
-        # ser.write("%01#RDD0010000107**\r")
+while True:
+    # success, image = cap.read()
 
-    success, image = cap.read()
-    if not success:
-        print("Ignoring empty camera frame.")
-        # If loading a video, use 'break' instead of 'continue'.
-        continue
+    # if not success:
+    #     print("Ignoring empty camera frame.")
+    #     # If loading a video, use 'break' instead of 'continue'.
+    #     continue
     # image = cv2.imread(file)
     # image = cv2.resize(cv2.imread(file), (600, 800))
+    image = color_stream.read_frame()
     image_height, image_width, _ = image.shape
     # Convert the BGR image to RGB before processing.
     results = pose.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
@@ -158,7 +162,7 @@ while cap.isOpened():
             break
         print("no landmarks")
         continue
-        
+
     # print(
     #     f'Left shoulder coordinates: ('
     #     f'{results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_SHOULDER].x * image_width}, '
@@ -169,35 +173,31 @@ while cap.isOpened():
     #     f'{results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_SHOULDER].x * image_width}, '
     #     f'{results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_SHOULDER].y * image_height})'
     # )
-    mid_x = int((results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_SHOULDER].x + 
+    mid_x = int((results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_SHOULDER].x +
                     results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_SHOULDER].x) / 2 * image_width)
-    mid_y = int((results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_SHOULDER].y + 
+    mid_y = int((results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_SHOULDER].y +
                     results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_SHOULDER].y) / 2 * image_width)
     shoulderL_x = int((results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_SHOULDER]).x * image_width)
     shoulderL_y = int((results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_SHOULDER]).y * image_height)
     shoulderR_x = int((results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_SHOULDER]).x * image_width)
     shoulderR_y = int((results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_SHOULDER]).y * image_height)
-    shoulder_width = (results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_SHOULDER].x - 
+    shoulder_width = (results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_SHOULDER].x -
                         results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_SHOULDER].x) * image_width
     pos_x = shoulderR_x
     pos_y = shoulderR_y
     scale = shoulder_width / cloth_width
     angle = calc_angle(shoulderR_x, shoulderR_y, shoulderL_x, shoulderL_y)
-    if angle < -0.2 or angle > 0.2:
+    if angle < -0.2 or angle > 0.2 or scale <= 0:
         cv2.imshow("", image)
         key = cv2.waitKey(1)
         if key & 0xFF == ord('q') or key == 27:
             cv2.destroyAllWindows()
             break
+        if key & 0xFF == ord("a"):
+            test_cloth = change_cloth("test_change.png")
+            print("on pressed a")
+            # ser.write("%01#RDD0010000107**\r")
         print("angle problem")
-        continue
-    if scale <= 0:
-        cv2.imshow("", image)
-        key = cv2.waitKey(1)
-        if key & 0xFF == ord('q') or key == 27:
-            cv2.destroyAllWindows()
-            break
-        print("scale problem")
         continue
     print(scale)
     # print(pos_x, pos_y)
@@ -219,8 +219,8 @@ while cap.isOpened():
 
     # Draw pose landmarks on the image.
     # mp_drawing.draw_landmarks(annotated_image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS, landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style())
-    
-    # show 
+
+    # show
     # cv2.imshow(annotated_image)
     # cv2.imwrite('skeleton' + str(idx) + '.png', annotated_image)
     # Plot pose world landmarks.
@@ -243,5 +243,12 @@ while cap.isOpened():
     if key & 0xFF == ord('q') or key == 27:
         cv2.destroyAllWindows()
         break
-cap.release()
+    if key & 0xFF == ord("a"):
+        test_cloth = change_cloth("test_change.png")
+        print("on pressed a")
+        # ser.write("a")
 
+
+# depth_stream.stop()
+color_stream.stop()
+dev.close()
