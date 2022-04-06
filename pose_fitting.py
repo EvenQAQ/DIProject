@@ -26,9 +26,9 @@ dev = openni2.Device.open_any()
 print(dev.get_device_info())
 
 # depth_stream = dev.create_depth_stream()
-color_stream = dev.create_color_stream()
+# color_stream = dev.create_color_stream()
 # depth_stream.start()
-color_stream.start()
+# color_stream.start()
 
 
 DESIRED_HEIGHT = 768
@@ -119,8 +119,15 @@ scale = 1
 origin_cloth = cv2.imread('trans_cloth.png', cv2.IMREAD_UNCHANGED)
 BG_COLOR = (192, 192, 192)  # gray
 
-cap = cv2.VideoCapture(0)
+device = cv2.CV_CAP_OPENNI
+cap = cv2.VideoCapture()
+if not(cap.isOpened()):
+    cap.open(device)
+
+cap.set(cv2.CV_CAP_PROP_FRAME_WIDTH, 768)
+cap.set(cv2.CV_CAP_PROP_FRAME_HEIGHT, 1024)
 cap.set(cv2.CAP_PROP_FPS, 60)
+
 # fourcc = cv2.VideoWriter_fourcc(*'MP4V')
 # fps = cap.get(cv2.CAP_PROP_FPS)
 # width, height = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(
