@@ -1,8 +1,8 @@
 import cv2
-from openni import openni2
-openni2.initialize()
+# from openni import openni2
+# openni2.initialize()
 
-capture = cv2.VideoCapture(cv2.CAP_OPENNI2)
+capture = cv2.VideoCapture(cv2.CAP_OPENNI_IMAGE_GENERATOR)
 capture.set(cv2.CAP_OPENNI_IMAGE_GENERATOR_OUTPUT_MODE, cv2.CAP_OPENNI_VGA_30HZ)
 
 print(capture.get(cv2.CAP_PROP_OPENNI_REGISTRATION))
