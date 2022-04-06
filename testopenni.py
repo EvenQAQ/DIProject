@@ -1,20 +1,20 @@
 import cv2
-import cv2.cv as cv
 
-capture = cv2.VideoCapture(cv.CV_CAP_OPENNI)
-capture.set(cv.CV_CAP_OPENNI_IMAGE_GENERATOR_OUTPUT_MODE, cv.CV_CAP_OPENNI_VGA_30HZ)
 
-print(capture.get(cv.CV_CAP_PROP_OPENNI_REGISTRATION))
+capture = cv2.VideoCapture(cv2.CV_CAP_OPENNI)
+capture.set(cv2.CV_CAP_OPENNI_IMAGE_GENERATOR_OUTPUT_MODE, cv2.CV_CAP_OPENNI_VGA_30HZ)
+
+print(capture.get(cv2.CV_CAP_PROP_OPENNI_REGISTRATION))
 
 while True:
     if not capture.grab():
         print("Unable to Grab Frames from camera")
         break
-    okay1, depth_map = capture.retrieve(cv.CV_CAP_OPENNI_DEPTH_MAP)
+    okay1, depth_map = capture.retrieve(cv2.CV_CAP_OPENNI_DEPTH_MAP)
     if not okay1:
         print("Unable to Retrieve Disparity Map from camera")
         break
-    okay2, gray_image = capture.retrieve(cv.CV_CAP_OPENNI_GRAY_IMAGE)
+    okay2, gray_image = capture.retrieve(cv2.CV_CAP_OPENNI_GRAY_IMAGE)
     if not okay2:
         print("Unable to retrieve Gray Image from device")
         break
