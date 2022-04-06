@@ -20,10 +20,10 @@ from PIL import Image
 # ser.open()
 # ser.isOpen()
 
-openni2.initialize()     # can also accept the path of the OpenNI redistribution
+# openni2.initialize()     # can also accept the path of the OpenNI redistribution
 
-dev = openni2.Device.open_any()
-print(dev.get_device_info())
+# dev = openni2.Device.open_any()
+# print(dev.get_device_info())
 
 # depth_stream = dev.create_depth_stream()
 # color_stream = dev.create_color_stream()
@@ -148,16 +148,16 @@ pose = mp_pose.Pose(
 #         enable_segmentation=True,
 #         min_detection_confidence=0.5) as pose:
 while True:
-    # success, image = cap.read()
+    success, image = cap.read()
 
-    # if not success:
-    #     print("Ignoring empty camera frame.")
-    #     # If loading a video, use 'break' instead of 'continue'.
-    #     continue
+    if not success:
+        print("Ignoring empty camera frame.")
+        # If loading a video, use 'break' instead of 'continue'.
+        continue
     # image = cv2.imread(file)
     # image = cv2.resize(cv2.imread(file), (600, 800))
-    image = color_stream.read_frame()
-    image_height, image_width, _ = image.shape
+    # image = color_stream.read_frame()
+    DESIRED_HEIGHT, DESIRED_WIDTH, _ = image.shape
     # Convert the BGR image to RGB before processing.
     results = pose.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
 
