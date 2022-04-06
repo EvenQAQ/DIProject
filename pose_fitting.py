@@ -31,8 +31,8 @@ from PIL import Image
 # color_stream.start()
 
 
-DESIRED_HEIGHT = 768
-DESIRED_WIDTH = 1024
+DESIRED_HEIGHT = 720
+DESIRED_WIDTH = 1280
 
 
 def resize_and_show(image):
@@ -151,7 +151,7 @@ while True:
     success, image = cap.read()
 
     if not success:
-        print("Ignoring empty camera frame.")
+        # print("Ignoring empty camera frame.")
         # If loading a video, use 'break' instead of 'continue'.
         continue
     # image = cv2.imread(file)
