@@ -1,5 +1,6 @@
 import cv2
-
+import openni2
+openni2.initialize()
 
 capture = cv2.VideoCapture(cv2.CAP_OPENNI)
 capture.set(cv2.CAP_OPENNI_IMAGE_GENERATOR_OUTPUT_MODE, cv2.CAP_OPENNI_VGA_30HZ)
