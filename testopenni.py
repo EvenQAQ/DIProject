@@ -1,7 +1,7 @@
 import cv2
 
 
-capture = cv2.VideoCapture(cv2.CAP_OPENNI2)
+capture = cv2.VideoCapture(cv2.CAP_OPENNI)
 capture.set(cv2.CAP_OPENNI_IMAGE_GENERATOR_OUTPUT_MODE, cv2.CAP_OPENNI_VGA_30HZ)
 
 print(capture.get(cv2.CAP_PROP_OPENNI_REGISTRATION))
