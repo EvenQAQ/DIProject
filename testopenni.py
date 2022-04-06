@@ -4,7 +4,7 @@ import cv2.cv as cv
 capture = cv2.VideoCapture(cv.CV_CAP_OPENNI)
 capture.set(cv.CV_CAP_OPENNI_IMAGE_GENERATOR_OUTPUT_MODE, cv.CV_CAP_OPENNI_VGA_30HZ)
 
-print capture.get(cv.CV_CAP_PROP_OPENNI_REGISTRATION)
+print(capture.get(cv.CV_CAP_PROP_OPENNI_REGISTRATION))
 
 while True:
     if not capture.grab():
