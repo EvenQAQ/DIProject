@@ -1,5 +1,5 @@
 import cv2
-import openni2
+import openni
 openni2.initialize()
 
 capture = cv2.VideoCapture(cv2.CAP_OPENNI)
