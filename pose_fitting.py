@@ -147,11 +147,11 @@ pose = mp_pose.Pose(
 #         model_complexity=2,
 #         enable_segmentation=True,
 #         min_detection_confidence=0.5) as pose:
-while True:
+while cap.isOpened():
     success, image = cap.read()
 
     if not success:
-        # print("Ignoring empty camera frame.")
+        print("Ignoring empty camera frame.")
         # If loading a video, use 'break' instead of 'continue'.
         continue
     # image = cv2.imread(file)
