@@ -120,7 +120,7 @@ origin_cloth = cv2.imread('trans_cloth.png', cv2.IMREAD_UNCHANGED)
 BG_COLOR = (192, 192, 192)  # gray
 
 # device = cv2.cv.CV_CAP_OPENNI
-cap = cv2.VideoCapture(cv2.CAP_OPENN)
+cap = cv2.VideoCapture(cv2.CAP_OPENNI)
 # if not(cap.isOpened()):
 #     cap.open(device)
 
